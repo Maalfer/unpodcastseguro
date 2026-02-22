@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block page_js %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/buscador.css') }}">
+<script src="{{ url_for('static', filename='js/chat.js') }}"></script>
+{% endblock %}
+
+{% block content %}
+<div class="chat-wrapper">
+  <div class="chat-container">
+    <div class="chat-header">
+      <div class="chat-icon-wrapper">
+        <i class="fas fa-robot chat-icon"></i>
+        <div class="icon-glow"></div>
+      </div>
+      <div class="header-text">
+        <h1>Buscador IA</h1>
+        <p>Pregunta sobre ciberseguridad y episodios del podcast</p>
+      </div>
+    </div>
+
+    <div class="chat-messages" id="chat-messages">
+      <div class="message ai-message">
+        <div class="message-content">
+          <p>Hola, soy la IA de Un Podcast Seguro. 🎙️🔐</p>
+          <p>He analizado todos los episodios y puedo responder tus dudas sobre ciberseguridad basándome en lo que han
+            contado nuestros expertos.</p>
+          <p>¿Qué te gustaría saber hoy?</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="chat-input-area">
+      <form id="chat-form">
+        <div class="input-wrapper">
+          <input type="text" id="chat-input" placeholder="Escribe tu pregunta sobre ciberseguridad..."
+            autocomplete="off">
+          <button type="submit" id="send-btn" aria-label="Enviar mensaje">
+            <i class="fas fa-arrow-up"></i>
+          </button>
+        </div>
+      </form>
+      <p class="disclaimer">La IA puede cometer errores. Verifica la información importante.</p>
+    </div>
+  </div>
+</div>
+{% endblock %}

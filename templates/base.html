@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
+    <!-- SEO Meta Tags -->
+    <title>{% block title %}Un Podcast Seguro | Podcast de Ciberseguridad y Hacking Ético{% endblock %}</title>
+    <meta name="description"
+        content="{% block meta_description %}Un Podcast Seguro: tu podcast líder en ciberseguridad, hacking ético y seguridad informática en español. Episodios semanales con expertos del sector, análisis de vulnerabilidades y las últimas tendencias en ciberseguridad.{% endblock %}">
+    <meta name="keywords"
+        content="{% block meta_keywords %}podcast ciberseguridad, ciberseguridad podcast, podcast de ciberseguridad, hacking ético, seguridad informática, podcast hacking, cybersecurity podcast español, pentesting, ethical hacking, seguridad de la información, podcast tecnología, vulnerabilidades, protección digital, CISO, consultores ciberseguridad{% endblock %}">
+    <meta name="author" content="Marc Gracia, David López, Joaquín Gamiz">
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+    <meta name="language" content="Spanish">
+    <meta name="revisit-after" content="7 days">
+    <link rel="canonical" href="{% block canonical %}https://unpodcastseguro.com{% endblock %}">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="{% block og_type %}website{% endblock %}">
+    <meta property="og:url" content="{% block og_url %}https://unpodcastseguro.com{% endblock %}">
+    <meta property="og:title"
+        content="{% block og_title %}Un Podcast Seguro | Podcast de Ciberseguridad y Hacking Ético{% endblock %}">
+    <meta property="og:description"
+        content="{% block og_description %}Podcast líder en ciberseguridad en español. Aprende sobre hacking ético, seguridad informática y protección digital con expertos del sector.{% endblock %}">
+    <meta property="og:image"
+        content="{% block og_image %}https://unpodcastseguro.com{{ url_for('static', filename='images/logo.webp') }}{% endblock %}">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:locale" content="es_ES">
+    <meta property="og:site_name" content="Un Podcast Seguro">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="{% block twitter_url %}https://unpodcastseguro.com{% endblock %}">
+    <meta name="twitter:title"
+        content="{% block twitter_title %}Un Podcast Seguro | Podcast de Ciberseguridad{% endblock %}">
+    <meta name="twitter:description"
+        content="{% block twitter_description %}Podcast líder en ciberseguridad y hacking ético en español. Episodios semanales con expertos.{% endblock %}">
+    <meta name="twitter:image"
+        content="{% block twitter_image %}https://unpodcastseguro.com{{ url_for('static', filename='images/logo.webp') }}{% endblock %}">
+
+    <!-- Schema.org Structured Data -->
+    {% block structured_data %}{% endblock %}
+
+    <!-- Performance Optimization -->
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com">
+    <link rel="dns-prefetch" href="https://fonts.gstatic.com">
+
+    <!-- Preload Critical Resources -->
+    <link rel="preload" href="{{ url_for('static', filename='css/style.css') }}" as="style">
+    <link rel="preload" href="{{ url_for('static', filename='images/header.webp') }}" as="image">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    {% block preload_resources %}{% endblock %}
+
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/logo.webp') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    {% block page_css %}{% endblock %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+        media="print" onload="this.media='all'">
+    <noscript>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    </noscript>
+
+    <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
+    <meta name="theme-color" content="#4885EA">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Podcast UPS">
+    <link rel="apple-touch-icon" href="{{ url_for('static', filename='images/logo.webp') }}">
+
+    {% block head_extra %}{% endblock %}
+</head>
+
+<body class="{% block body_class %}{% endblock %}">
+
+    {% if mostrar_header != false %}
+    <header class="animated-header" role="banner">
+        <div class="logo-container">
+            <a href="{{ url_for('main.vista_home') }}" aria-label="Ir a la página principal de Un Podcast Seguro">
+                <img src="{{ url_for('static', filename='images/header.webp') }}\"
+                    alt="Un Podcast Seguro - Logo del podcast de ciberseguridad" class="header-image" width="160"
+                    height="80">
+            </a>
+        </div>
+
+        <button class="hamburger-menu" aria-label="Abrir menú de navegación" aria-expanded="false">
+            <i class="fas fa-bars"></i>
+        </button>
+
+        <nav class="navbar" role="navigation" aria-label="Navegación principal">
+            <a href="{{ url_for('main.vista_home') }}"
+                class="{% if request.endpoint == 'main.vista_home' %}active{% endif %}">Inicio</a>
+            <a href="{{ url_for('main.vista_buscador') }}"
+                class="{% if request.endpoint == 'main.vista_buscador' %}active{% endif %}">Buscador</a>
+            <a href="{{ url_for('main.vista_home') }}#about">Nosotros</a>
+            <a href="{{ url_for('main.vista_home') }}#episodios">Episodios</a>
+            <a href="{{ url_for('main.vista_home') }}#suscribirse">Suscribirse</a>
+            <a href="{{ url_for('main.vista_home') }}#contacto">Contacto</a>
+
+            {% if session.get('usuario') %}
+            <a href="{{ url_for('dashboard.vista_dashboard') }}"
+                class="{% if request.endpoint == 'dashboard.vista_dashboard' %}active{% endif %}">Dashboard</a>
+            <a href="{{ url_for('auth.vista_perfil') }}"
+                class="{% if request.endpoint == 'auth.vista_perfil' %}active{% endif %}">Perfil</a>
+            <a href="{{ url_for('auth.vista_logout') }}">Cerrar sesión</a>
+            {% endif %}
+        </nav>
+    </header>
+    {% endif %}
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="modern-footer">
+        <div class="footer-container">
+            <div class="footer-grid">
+
+                <div class="footer-col brand-col">
+                    <img src="{{ url_for('static', filename='images/header.webp') }}" alt="Un Podcast Seguro"
+                        class="footer-logo" width="140" height="70">
+                    <p class="footer-tagline">Tu dosis semanal de seguridad informática, hacking ético y tecnología.
+                    </p>
+                </div>
+
+
+                <div class="footer-col">
+                    <h3>Navegación</h3>
+                    <ul class="footer-links-list">
+                        <li><a href="{{ url_for('main.vista_home') }}">Inicio</a></li>
+                        <li><a href="{{ url_for('main.vista_buscador') }}">Buscador IA</a></li>
+                        <li><a href="{{ url_for('main.vista_home') }}#episodios">Episodios</a></li>
+                        <li><a href="{{ url_for('main.vista_home') }}#invitados">Invitados</a></li>
+                    </ul>
+                </div>
+
+
+
+
+
+
+                <div class="footer-col">
+                    <h3>Redes</h3>
+                    <ul class="footer-links-list">
+                        <li><a href="https://privacidad.me/@unpodcastseguro" target="_blank" rel="me"><i
+                                    class="fab fa-mastodon"></i> Mastodon</a></li>
+                        <li><a href="https://open.spotify.com/show/40WZSLjdici4BUn3HnMd0B" target="_blank"
+                                rel="noopener noreferrer"><i class="fab fa-spotify"></i> Spotify</a></li>
+                        <li><a href="https://www.linkedin.com/company/un-podcast-seguro/" target="_blank"
+                                rel="noopener noreferrer"><i class="fab fa-linkedin"></i> LinkedIn</a></li>
+                        <li><a href="https://www.instagram.com/unpodcastseguro/" target="_blank"
+                                rel="noopener noreferrer"><i class="fab fa-instagram"></i> Instagram</a></li>
+                        <li><a href="https://www.tiktok.com/@un.podcast.seguro" target="_blank"
+                                rel="noopener noreferrer"><i class="fab fa-tiktok"></i> TikTok</a></li>
+                        <li><a href="https://www.youtube.com/@unpodcastseguro" target="_blank"
+                                rel="noopener noreferrer"><i class="fab fa-youtube"></i> YouTube</a></li>
+                        <li><a href="https://music.amazon.es/podcasts/e0c2f497-d3db-4d5b-8cfb-c64de7fb8061/un-podcast-seguro"
+                                target="_blank" rel="noopener noreferrer"><i class="fab fa-amazon"></i> Amazon Music</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="footer-col">
+                    <h3>Legal</h3>
+                    <ul class="footer-links-list">
+                        <li><a href="{{ url_for('main.politica_privacidad') }}">Política de Privacidad</a></li>
+                        <li><a href="{{ url_for('main.aviso_legal') }}">Aviso Legal</a></li>
+                        <li><a href="{{ url_for('main.cookies') }}">Cookies</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; {{ now.year }} Un Podcast Seguro. Todos los derechos reservados.</p>
+                <div class="made-with">
+                    <span>Hecho con <i class="fas fa-heart" style="color: #ff4757;"></i> por <a
+                            href="https://tusendadigital.com" target="_blank"
+                            style="color: inherit; text-decoration: none;">Tu Senda Digital</a></span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    {% block page_js %}{% endblock %}
+    <script src="{{ url_for('static', filename='js/script.js') }}" defer></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/static/sw.js')
+                    .then((registration) => {
+                        console.log('ServiceWorker registration successful with scope: ', registration.scope);
+                    }, (err) => {
+                        console.log('ServiceWorker registration failed: ', err);
+                    });
+            });
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,708 @@
+{% extends "base.html" %}
+
+{% block title %}Un Podcast Seguro | Podcast de Ciberseguridad y Hacking Ético en Español{% endblock %}
+{% block preload_resources %}
+<link rel="preload" href="{{ url_for('static', filename='css/home.css') }}" as="style">
+{% endblock %}
+
+{% block page_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+{% endblock %}
+
+{% block structured_data %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "PodcastSeries",
+  "name": "Un Podcast Seguro",
+  "description": "Podcast líder en ciberseguridad, hacking ético y seguridad informática en español. Episodios semanales con expertos del sector, análisis de vulnerabilidades, tendencias en protección digital y entrevistas con profesionales de la ciberseguridad.",
+  "url": "https://unpodcastseguro.com",
+  "image": "https://unpodcastseguro.com{{ url_for('static', filename='images/logo.webp') }}",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Marc Gracia",
+      "url": "https://www.linkedin.com/in/marcgr1998/"
+    },
+    {
+      "@type": "Person",
+      "name": "David López",
+      "url": "https://www.linkedin.com/in/david-lópez-llorens-874274225/"
+    },
+    {
+      "@type": "Person",
+      "name": "Joaquín Gamiz",
+      "url": "https://www.linkedin.com/in/joaquin-gamiz/"
+    }
+  ],
+  "genre": ["Technology", "Education", "Cybersecurity", "Information Security"],
+  "inLanguage": "es",
+  "keywords": "ciberseguridad, hacking ético, seguridad informática, pentesting, vulnerabilidades, protección digital, ethical hacking, cybersecurity",
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "5.0",
+    "ratingCount": "50"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Un Podcast Seguro",
+    "url": "https://unpodcastseguro.com",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://unpodcastseguro.com{{ url_for('static', filename='images/logo.webp') }}"
+    }
+  },
+  "webFeed": "https://open.spotify.com/show/40WZSLjdici4BUn3HnMd0B"
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Un Podcast Seguro",
+  "url": "https://unpodcastseguro.com",
+  "logo": "https://unpodcastseguro.com{{ url_for('static', filename='images/logo.webp') }}",
+  "description": "Podcast de ciberseguridad y hacking ético en español",
+  "sameAs": [
+    "https://www.linkedin.com/company/un-podcast-seguro",
+    "https://open.spotify.com/show/40WZSLjdici4BUn3HnMd0B"
+  ],
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "email": "info@unpodcastseguro.com",
+    "contactType": "Customer Service"
+  }
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "Un Podcast Seguro",
+  "url": "https://unpodcastseguro.com",
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": "https://unpodcastseguro.com/buscador?q={search_term_string}",
+    "query-input": "required name=search_term_string"
+  }
+}
+</script>
+{% endblock %}
+
+{% block content %}
+
+<section class="hero">
+  <div class="hero-content">
+
+    <div class="hero-hosts">
+      {% for founder in fundadores %}
+      {% if founder.link %}
+      <a href="{{ founder.link }}" target="_blank" rel="noopener noreferrer">
+        <img src="{{ url_for('static', filename='images/fundadores/' + founder.image) }}"
+          alt="{{ founder.name }} - Cofundador de Un Podcast Seguro, experto en ciberseguridad" class="hero-host-image"
+          width="130" height="130" fetchpriority="high" decoding="sync">
+      </a>
+      {% else %}
+      <img src="{{ url_for('static', filename='images/fundadores/' + founder.image) }}"
+        alt="{{ founder.name }} - Cofundador de Un Podcast Seguro, experto en ciberseguridad" class="hero-host-image"
+        width="130" height="130" fetchpriority="high" decoding="sync">
+      {% endif %}
+      {% endfor %}
+    </div>
+
+    <h1 class="hero-title">Un Podcast Seguro</h1>
+    <p class="hero-subtitle">{{ hero_subtitle if hero_subtitle else '¡Un podcast de ciberseguridad hecho para los que
+      son y quieren ser profesionales de la ciberseguridad!' }}</p>
+    <div class="hero-buttons">
+      <a href="#episodios" class="btn btn-primary">
+        <i class="fas fa-play"></i>
+        Escuchar Episodios
+      </a>
+      <a href="#suscribirse" class="btn btn-secondary">
+        <i class="fas fa-bell"></i>
+        Suscribirse
+      </a>
+    </div>
+  </div>
+</section>
+
+
+<section class="episodes-section" id="episodios">
+  <div class="container">
+    <h2 class="section-title">
+      <i class="fas fa-headphones"></i>
+      Últimos Episodios
+    </h2>
+
+
+    <div class="episodes-grid" id="episodes-container">
+
+    </div>
+
+    <div class="text-center" style="margin-top: 40px;">
+      <a href="#" class="btn btn-primary" id="toggleEpisodesBtn">
+        <i class="fas fa-chevron-down"></i>
+        Ver todos los episodios
+      </a>
+    </div>
+  </div>
+</section>
+
+
+<section class="about-section" id="about">
+  <div class="about-container">
+    <h2 class="section-title">
+      <i class="fas fa-users-line"></i>
+      Quiénes Somos
+    </h2>
+    <div class="about-content">
+      <div class="about-text">
+        {% for paragraph in about_data.paragraphs %}
+        <p>{{ paragraph.text | safe }}</p>
+        {% endfor %}
+
+        {% if about_data.award and about_data.award.title %}
+        <div class="award-box centered-award">
+          <p class="award-intro">
+            {{ about_data.award.intro }}
+          </p>
+          <a href="{{ about_data.award.url }}" target="_blank" class="award-link">
+            <div class="award-icon"><i class="fas fa-trophy"></i></div>
+            <div class="award-content">
+              <span class="award-title">{{ about_data.award.title }}</span>
+              <span class="award-subtitle">{{ about_data.award.subtitle }}</span>
+            </div>
+            <div class="award-arrow"><i class="fas fa-external-link-alt"></i></div>
+          </a>
+        </div>
+        {% endif %}
+
+        <div class="about-image">
+          <img src="{{ url_for('static', filename='images/logo.webp') }}"
+            alt="Logo Un Podcast Seguro - Podcast de ciberseguridad y hacking ético" class="rounded-image" width="150"
+            height="150" loading="lazy" decoding="async">
+        </div>
+      </div>
+    </div>
+
+
+  </div>
+</section>
+
+
+<section class="guests-section" id="invitados">
+  <div class="container">
+    <h2 class="section-title">
+      <i class="fas fa-microphone-lines"></i>
+      Invitados Destacados
+    </h2>
+
+    <div class="guests-grid" id="guests-container">
+      {% for guest in guests %}
+      <div class="guest-card">
+        <img src="{{ url_for('static', filename='images/' + guest.image) }}"
+          alt="{{ guest.name }} - Invitado experto en ciberseguridad en Un Podcast Seguro" class="guest-image"
+          width="120" height="120" loading="lazy">
+        <h3 class="guest-name">{{ guest.name }}</h3>
+        <p class="guest-episode">{{ guest.role }}</p>
+        <div class="guest-social">
+          {% if guest.linkedin %}
+          <a href="{{ guest.linkedin }}" target="_blank" title="LinkedIn">
+            <i class="fab fa-linkedin"></i>
+          </a>
+          {% endif %}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+
+
+
+<section class="sponsors-section" id="colaboradores">
+  <div class="container">
+    <h2 class="section-title">
+      <i class="fas fa-handshake"></i>
+      Colaboradores
+    </h2>
+    <p class="sponsors-intro">Empresas que hacen posible este proyecto. <a href="#contacto">¿Quieres unirte?</a></p>
+
+
+    <div class="main-sponsor">
+      <div class="main-sponsor-badge">Patrocinador Principal</div>
+      <a href="https://www.sevensector.com/" target="_blank" class="main-sponsor-content">
+        <img src="{{ url_for('static', filename='images/sevensector.webp') }}"
+          alt="Seven Sector - Patrocinador principal de Un Podcast Seguro, tecnología de ciberseguridad"
+          class="main-sponsor-logo" width="250" height="120" loading="lazy">
+        <div class="main-sponsor-info">
+          <h3>Seven Sector Technologies</h3>
+          <p>Desarrollamos tecnología de ciberseguridad que redefine la protección digital. Creamos soluciones
+            inteligentes, escalables y enfocadas en resultados reales para proteger infraestructuras IT, OT e IoT.</p>
+          <span class="visit-web">Visitar web <i class="fas fa-arrow-right"></i></span>
+        </div>
+      </a>
+    </div>
+
+
+    <div class="slider-container">
+      <div class="sponsors-track">
+        {% for colab in colaboradores %}
+        <div class="sponsor-card">
+          <a href="{{ colab.url }}" target="_blank">
+            <img src="{{ url_for('static', filename='images/' + colab.image) }}" alt="{{ colab.name }}" width="140"
+              height="60" class="sponsor-logo" loading="lazy">
+            <p class="colab-name">{{ colab.name }}</p>
+          </a>
+        </div>
+        {% endfor %}
+        {# Duplicate for infinite scroll effect #}
+        {% for colab in colaboradores %}
+        <div class="sponsor-card">
+          <a href="{{ colab.url }}" target="_blank">
+            <img src="{{ url_for('static', filename='images/' + colab.image) }}" alt="{{ colab.name }}" width="140"
+              height="60" class="sponsor-logo" loading="lazy">
+            <p class="colab-name">{{ colab.name }}</p>
+          </a>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="acknowledgments-section" id="agradecimientos">
+  <div class="container">
+    <h2 class="section-title">
+      <i class="fas fa-heart"></i>
+      Agradecimientos
+    </h2>
+
+    <div class="ack-card">
+      <div class="ack-logo-container">
+        <img src="{{ url_for('static', filename='images/tusendadigital.png') }}"
+          alt="Tu Senda Digital - Desarrollo web para Un Podcast Seguro" class="ack-logo" loading="lazy">
+      </div>
+      <h3 class="ack-title">Tu Senda Digital</h3>
+      <p class="ack-description">
+        Queremos expresar nuestro más sincero agradecimiento a <strong>Tu Senda Digital</strong> por el diseño y
+        desarrollo de esta página web. Su profesionalidad y visión han sido fundamentales para dar vida a Un Podcast
+        Seguro en el mundo digital.
+      </p>
+      <div class="ack-actions">
+        <a href="https://tusendadigital.com" target="_blank" class="ack-btn">
+          <span>Visitar Web</span>
+          <i class="fas fa-external-link-alt"></i>
+        </a>
+        <a href="mailto:contacto@tusendadigital.com" class="ack-btn">
+          <span>Contactar</span>
+          <i class="fas fa-envelope"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="subscribe-section" id="suscribirse">
+  <div class="container">
+    <div class="subscribe-card">
+      <h2 class="section-title">
+        <i class="fas fa-podcast"></i>
+        Suscríbete al Podcast
+      </h2>
+      <p class="subscribe-text">Únete a nuestra comunidad de más de 500 oyentes. No te pierdas ningún episodio y
+        mantente al día con las últimas tendencias en ciberseguridad.</p>
+
+      <div class="platforms-grid">
+        <a href="https://open.spotify.com/show/40WZSLjdici4BUn3HnMd0B" class="platform-link" target="_blank"
+          rel="noopener noreferrer">
+          <i class="fab fa-spotify"></i>
+          Spotify
+        </a>
+        <a href="https://music.amazon.es/podcasts/e0c2f497-d3db-4d5b-8cfb-c64de7fb8061/un-podcast-seguro"
+          class="platform-link" target="_blank" rel="noopener noreferrer">
+          <i class="fab fa-amazon"></i>
+          Amazon Music
+        </a>
+        <a href="https://www.youtube.com/@unpodcastseguro" class="platform-link" target="_blank"
+          rel="noopener noreferrer">
+          <i class="fab fa-youtube"></i>
+          YouTube
+        </a>
+
+        <a href="https://www.linkedin.com/company/un-podcast-seguro/" class="platform-link" target="_blank"
+          rel="noopener noreferrer">
+          <i class="fab fa-linkedin"></i>
+          LinkedIn
+        </a>
+        <a href="https://www.instagram.com/unpodcastseguro/" class="platform-link" target="_blank"
+          rel="noopener noreferrer">
+          <i class="fab fa-instagram"></i>
+          Instagram
+        </a>
+        <a href="https://www.tiktok.com/@un.podcast.seguro" class="platform-link" target="_blank"
+          rel="noopener noreferrer">
+          <i class="fab fa-tiktok"></i>
+          TikTok
+        </a>
+      </div>
+
+      <div class="newsletter-form">
+        <h3>
+          <i class="fas fa-envelope"></i>
+          Newsletter Semanal
+        </h3>
+        <p>Recibe resúmenes exclusivos de los episodios, anécdotas y reflexiones adicionales.</p>
+
+        <!-- Iframe oculto para que no se vea {"success":true} -->
+        <iframe name="ml_iframe" id="ml_iframe" style="display:none;"></iframe>
+
+        <form id="ml-newsletter-form"
+          action="https://assets.mailerlite.com/jsonp/1662324/forms/162242899423003806/subscribe" method="post"
+          target="ml_iframe">
+          <div class="input-group">
+            <input type="email" name="fields[email]" placeholder="Tu correo electrónico" autocomplete="email" required>
+            <button type="submit" class="btn btn-primary" id="ml-submit-btn">
+              <i class="fas fa-paper-plane"></i>
+              Suscribirse
+            </button>
+          </div>
+
+          <label class="checkbox" style="display:block; margin-top:10px;">
+            <input type="checkbox" name="privacy" value="1" required>
+            <span class="label-description">
+              He leído y acepto la
+              <a href="https://unpodcastseguro.com/politica-privacidad" target="_blank" rel="noopener noreferrer">
+                política de privacidad
+              </a>
+            </span>
+          </label>
+
+          <input type="hidden" name="ml-submit" value="1">
+          <input type="hidden" name="anticsrf" value="true">
+        </form>
+
+        <!-- Modal -->
+        <div id="newsletterModal" class="nl-modal" aria-hidden="true">
+          <div class="nl-modal-backdrop" data-close="1"></div>
+          <div class="nl-modal-card" role="dialog" aria-modal="true" aria-labelledby="nlModalTitle">
+            <button class="nl-modal-close" type="button" aria-label="Cerrar" data-close="1">×</button>
+            <h4 id="nlModalTitle" style="margin:0 0 8px 0;">¡Listo! 🎉</h4>
+            <p style="margin:0;">
+              Te hemos enviado un correo para <strong>confirmar tu suscripción</strong>.
+              Revisa tu bandeja de entrada (y SPAM/Promociones).
+            </p>
+          </div>
+        </div>
+
+        <style>
+          /* Modal aislado para que NO lo rompan tus estilos globales */
+          .nl-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 99999;
+          }
+
+          .nl-modal.is-open {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+          }
+
+          .nl-modal-backdrop {
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, .55);
+          }
+
+          .nl-modal-card {
+            position: relative;
+            width: min(520px, 92vw);
+            background: #fff;
+            border-radius: 16px;
+            padding: 18px 18px 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, .25);
+            z-index: 1;
+          }
+
+          /* Fuerza colores y tipografía dentro del modal (evita "texto invisible") */
+          .nl-modal-card,
+          .nl-modal-card * {
+            color: #111 !important;
+            font-family: inherit !important;
+          }
+
+          .nl-modal-title {
+            margin: 0 0 8px 0;
+            font-size: 20px;
+            line-height: 1.2;
+          }
+
+          .nl-modal-text {
+            margin: 0;
+            font-size: 14px;
+            line-height: 1.5;
+            opacity: .9;
+          }
+
+          .nl-modal-actions {
+            margin-top: 14px;
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+          }
+
+          .nl-modal-close {
+            position: absolute;
+            top: 10px;
+            right: 12px;
+            border: none;
+            background: transparent;
+            font-size: 26px;
+            cursor: pointer;
+            line-height: 1;
+            opacity: .75;
+          }
+
+          .nl-modal-close:hover {
+            opacity: 1;
+          }
+        </style>
+
+        <script>
+          (function () {
+            const form = document.getElementById('ml-newsletter-form');
+            const iframe = document.getElementById('ml_iframe');
+            const modal = document.getElementById('newsletterModal');
+            const submitBtn = document.getElementById('ml-submit-btn');
+
+            function openModal() {
+              modal.classList.add('is-open');
+              modal.setAttribute('aria-hidden', 'false');
+            }
+            function closeModal() {
+              modal.classList.remove('is-open');
+              modal.setAttribute('aria-hidden', 'true');
+            }
+
+            modal.addEventListener('click', (e) => {
+              if (e.target?.dataset?.close === "1") closeModal();
+            });
+
+            document.addEventListener('keydown', (e) => {
+              if (e.key === 'Escape') closeModal();
+            });
+
+            form.addEventListener('submit', () => {
+              if (submitBtn) submitBtn.disabled = true;
+            });
+
+            iframe.addEventListener('load', () => {
+              openModal();
+              if (submitBtn) submitBtn.disabled = false;
+              // form.reset(); // opcional
+            });
+          })();
+        </script>
+
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<section class="testimonials-section">
+  <div class="container">
+    <h2 class="section-title">
+      <i class="fas fa-star"></i>
+      Recomendaciones de Nuestros Invitados
+    </h2>
+    <div class="testimonials-slider" id="recommendations-container">
+      <div class="testimonial-card">
+        <p class="testimonial-text">El mejor podcast en español sobre seguridad informática. Los presentadores logran
+          explicar conceptos complejos de manera muy accesible sin perder profundidad técnica.</p>
+        <p class="testimonial-author">— Juan Pérez, CISO en TechCorp</p>
+      </div>
+      <div class="testimonial-card">
+        <p class="testimonial-text">Desde que escucho Un Podcast Seguro he transformado completamente mis prácticas de
+          seguridad digital. Los consejos son prácticos y aplicables inmediatamente.</p>
+        <p class="testimonial-author">— Ana Gómez, Desarrolladora Senior</p>
+      </div>
+      <div class="testimonial-card">
+        <p class="testimonial-text">La calidad de los invitados y la profundidad de las conversaciones es excepcional.
+          Es mi fuente principal para mantenerme actualizado en el sector.</p>
+        <p class="testimonial-author">— Luis Martínez, Consultor en Ciberseguridad</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="stats-section">
+  <div class="container">
+    <div class="stats-grid">
+      {% for stat in estadisticas %}
+      <div class="stat-card">
+        <div class="stat-number">{{ stat.number }}</div>
+        <div class="stat-label">{{ stat.label }}</div>
+      </div>
+      {% endfor %}
+    </div>
+    <div class="award-section" id="awards-container">
+    </div>
+  </div>
+</section>
+
+
+<section class="newsletter-section" id="newsletter-examples">
+  <div class="container">
+    <h2 class="section-title">
+      <i class="fas fa-newspaper"></i>
+      Nuestras Newsletters
+    </h2>
+    <p class="newsletter-intro">Mira ejemplos de los correos que recibirías al suscribirte a nuestras newsletters.</p>
+    <div class="newsletter-list">
+      {% for news in newsletters %}
+      <div class="newsletter-item" onclick="document.getElementById('suscribirse').scrollIntoView({behavior: 'smooth'})"
+        style="cursor: pointer;">
+        <div class="newsletter-header">
+          <span class="newsletter-badge {{ news.badge_class }}">{{ news.badge }}</span>
+          <span class="newsletter-date">{{ news.date }}</span>
+        </div>
+        <h3 class="newsletter-title">{{ news.title }}</h3>
+        <div class="newsletter-preview">
+          <p>{{ news.description }}</p>
+          <div class="newsletter-highlights">
+            {% for highlight in news.highlights %}
+            <div class="highlight-item">
+              <i class="{{ highlight.icon }}"></i>
+              <span>{{ highlight.text | safe }}</span>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+
+
+    <div class="text-center" style="margin-top: 50px;">
+      <a href="#suscribirse" class="btn btn-primary btn-large">
+        <i class="fas fa-envelope"></i>
+        Suscríbete para Recibir Nuestras Newsletters
+      </a>
+    </div>
+  </div>
+</section>
+
+
+<section class="contact-section" id="contacto">
+  <div class="container">
+    <h2 class="section-title">
+      <i class="fas fa-comments"></i>
+      ¿Quieres Participar o Conectar con Nosotros?
+    </h2>
+    <div class="contact-content">
+
+      <div class="contact-info">
+        <h3>¿Quieres Participar?</h3>
+        <p>Si eres experto en ciberseguridad, tienes una historia fascinante o quieres colaborar con nosotros, nos
+          encantaría contar contigo. Cuéntanos más sobre ti.</p>
+      </div>
+
+      <div class="contact-info">
+        <h3>¿Quieres patrocinar el podcast?</h3>
+        <p>Patrocina un episodio o una temporada y pon tu marca delante de empresas y profesionales de ciberseguridad.
+        </p>
+      </div>
+
+    </div>
+
+    <!-- Contact details centered below both columns -->
+    <div class="contact-methods centered-contact">
+      <ul class="contact-list justify-center">
+        <li>
+          <i class="fas fa-envelope"></i>
+          <a href="mailto:info@unpodcastseguro.com"><span>info@unpodcastseguro.com</span></a>
+        </li>
+        <li>
+          <i class="fab fa-linkedin"></i>
+          <a href="https://www.linkedin.com/company/un-podcast-seguro/" target="_blank"><span>Un
+              Podcast Seguro</span></a>
+        </li>
+      </ul>
+    </div>
+
+  </div>
+  </div>
+</section>
+
+
+
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const grid = document.getElementById('sponsors-grid');
+    if (!grid) return;
+
+
+    const STATIC_IMG_PREFIX = "{{ url_for('static', filename='images/') }}";
+
+
+    const SPONSORS = [
+      { file: 'sponsor_1.webp', alt: 'Empresa Alfa', url: 'https://ejemplo.com' },
+      { file: 'sponsor_2.webp', alt: 'Empresa Beta', url: 'https://ejemplo.com' },
+      { file: 'sponsor_3.webp', alt: 'Empresa Beta', url: 'https://ejemplo.com' },
+      { file: 'sponsor_4.webp', alt: 'Empresa Delta', url: 'https://ejemplo.com' },
+      { file: 'sponsor_5.webp', alt: 'Empresa Beta', url: 'https://ejemplo.com' },
+      { file: 'sponsor_6.webp', alt: 'Empresa Delta', url: 'https://ejemplo.com' },
+    ];
+
+
+    SPONSORS.forEach(sp => {
+      const card = document.createElement('div');
+      card.className = 'sponsor-card';
+      const img = document.createElement('img');
+      img.className = 'sponsor-logo';
+      img.alt = sp.alt || 'Sponsor';
+      img.loading = 'lazy';
+      img.src = STATIC_IMG_PREFIX + sp.file;
+
+      if (sp.url) {
+        const a = document.createElement('a');
+        a.href = sp.url;
+        a.target = '_blank';
+        a.rel = 'noopener noreferrer';
+        a.appendChild(img);
+        card.appendChild(a);
+      } else {
+        card.appendChild(img);
+      }
+
+
+      img.addEventListener('error', () => {
+        card.style.display = 'none';
+
+      });
+
+      grid.appendChild(card);
+    });
+  });
+
+  function selectSubject(element, subject) {
+    const tags = document.querySelectorAll('.p-tag');
+    tags.forEach(tag => tag.classList.remove('active'));
+    element.classList.add('active');
+    document.getElementById('subject').value = subject;
+  }
+</script>
+<link rel="stylesheet" href="{{ url_for('static', filename='home.css') }}">
+{% endblock %}

@@ -1,0 +1,152 @@
+{% extends "base.html" %}
+
+{% block title %}Acceso Denegado - 403{% endblock %}
+{% block body_class %}error-page{% endblock %}
+
+{% block page_css %}
+<style>
+    .error-container {
+        min-height: 80vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        padding: 2rem;
+    }
+
+    .error-code {
+        font-size: 8rem;
+        font-weight: 800;
+        color: #ff4757;
+        text-shadow: 0 0 20px rgba(255, 71, 87, 0.5);
+        margin: 0;
+        line-height: 1;
+    }
+
+    .error-title {
+        font-size: 2.5rem;
+        color: var(--text-primary);
+        margin: 1rem 0;
+    }
+
+    .error-message {
+        font-size: 1.2rem;
+        color: var(--text-secondary);
+        max-width: 600px;
+        margin-bottom: 2rem;
+    }
+
+    .btn-return {
+        display: inline-block;
+        padding: 1rem 2rem;
+        background: linear-gradient(135deg, #ff4757, #ff6b81);
+        color: white;
+        text-decoration: none;
+        border-radius: 30px;
+        font-weight: 600;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .btn-return:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(255, 71, 87, 0.4);
+        color: white;
+    }
+
+    .cyber-glitch {
+        position: relative;
+    }
+
+    .cyber-glitch::before,
+    .cyber-glitch::after {
+        content: attr(data-text);
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0.8;
+    }
+
+    .cyber-glitch::before {
+        left: 2px;
+        text-shadow: -2px 0 #4885EA;
+        clip: rect(44px, 450px, 56px, 0);
+        animation: glitch-anim 5s infinite linear alternate-reverse;
+    }
+
+    .cyber-glitch::after {
+        left: -2px;
+        text-shadow: -2px 0 #00fff9;
+        clip: rect(44px, 450px, 56px, 0);
+        animation: glitch-anim2 5s infinite linear alternate-reverse;
+    }
+
+    @keyframes glitch-anim {
+        0% {
+            clip: rect(72px, 9999px, 83px, 0);
+        }
+
+        20% {
+            clip: rect(31px, 9999px, 89px, 0);
+        }
+
+        40% {
+            clip: rect(51px, 9999px, 85px, 0);
+        }
+
+        60% {
+            clip: rect(80px, 9999px, 12px, 0);
+        }
+
+        80% {
+            clip: rect(33px, 9999px, 3px, 0);
+        }
+
+        100% {
+            clip: rect(21px, 9999px, 63px, 0);
+        }
+    }
+
+    @keyframes glitch-anim2 {
+        0% {
+            clip: rect(65px, 9999px, 100px, 0);
+        }
+
+        20% {
+            clip: rect(10px, 9999px, 33px, 0);
+        }
+
+        40% {
+            clip: rect(38px, 9999px, 1px, 0);
+        }
+
+        60% {
+            clip: rect(71px, 9999px, 73px, 0);
+        }
+
+        80% {
+            clip: rect(31px, 9999px, 50px, 0);
+        }
+
+        100% {
+            clip: rect(10px, 9999px, 88px, 0);
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="error-container">
+    <div class="cyber-glitch" data-text="403">
+        <h1 class="error-code">403</h1>
+    </div>
+    <h2 class="error-title">Acceso Denegado</h2>
+    <p class="error-message">No tienes autorización para acceder a este recurso. Puede que necesites iniciar sesión o
+        que el acceso esté restringido.</p>
+    <a href="{{ url_for('main.vista_home') }}" class="btn-return">
+        <i class="fas fa-home"></i> Volver a la Base
+    </a>
+</div>
+{% endblock %}

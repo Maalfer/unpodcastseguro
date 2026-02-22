@@ -1,0 +1,48 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.env
+.env.local
+
+# Logs
+*.log
+sync_log.json
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+*.db-shm
+*.db-wal
+*.shm
+*.wal
+database/*.db
+database/transcripts/
+
+# Secrets
+.secret_key
+*.pem
+*.key
+
+# Binaries
+yt-dlp
+
+# Media/Generated Content
+static/data/*
+!static/data/videos.json
+uploads/
+
+# Local Tests
+test_*.py
+
+# OS specific
+.DS_Store
+
+# IDEs
+.vscode/
+.idea/
+
+# Lock files
+sync.lock

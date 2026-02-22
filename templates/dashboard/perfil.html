@@ -1,0 +1,153 @@
+{% extends "base.html" %}
+
+{% block title %}Mi Perfil{% endblock %}
+
+{% block content %}
+<div class="profile-container">
+  <div class="container">
+    <div class="profile-header">
+
+      <div class="profile-info">
+        <h1>Mi Perfil</h1>
+        <p>Administra tu cuenta y configuración de seguridad</p>
+      </div>
+    </div>
+
+    <div class="profile-content">
+
+      <div class="profile-card">
+        <div class="card-header">
+          <div class="header-icon-wrapper">
+            <i class="fas fa-user-shield"></i>
+          </div>
+          <div class="header-content">
+            <h3>Configuración de Cuenta</h3>
+            <p>Actualiza tu información personal y credenciales de acceso de forma segura</p>
+          </div>
+        </div>
+
+        {% if mensaje %}
+        <div class="success-message">
+          <i class="fas fa-check-circle"></i>
+          <span>{{ mensaje }}</span>
+        </div>
+        {% endif %}
+
+        <form method="POST" class="profile-form">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+          
+          <div class="form-section">
+            <div class="section-header">
+              <i class="fas fa-user"></i>
+              <span>Nombre de Usuario</span>
+            </div>
+            <div class="input-container">
+              <div class="input-icon">
+                <i class="fas fa-at"></i>
+              </div>
+              <input type="text" name="nuevo_usuario" id="nuevo_usuario" placeholder="Tu nombre de usuario"
+                value="{{ usuario if usuario else '' }}" class="modern-input">
+            </div>
+          </div>
+
+          
+          <div class="form-section">
+            <div class="section-header">
+              <i class="fas fa-lock"></i>
+              <span>Nueva Contraseña</span>
+            </div>
+            <div class="input-container password-container">
+              <div class="input-icon">
+                <i class="fas fa-key"></i>
+              </div>
+              <input type="password" name="nueva_contrasena" id="nueva_contrasena"
+                placeholder="Dejar en blanco para mantener la actual" class="modern-input">
+              <button type="button" class="password-toggle">
+                <i class="fas fa-eye"></i>
+              </button>
+            </div>
+
+            
+            <div class="password-strength">
+              <div class="strength-bar-container">
+                <div class="strength-fill"></div>
+              </div>
+              <div class="strength-info">
+                <i class="fas fa-shield-alt"></i>
+                <span class="strength-text">Introduce una contraseña</span>
+              </div>
+            </div>
+          </div>
+
+          
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary">
+              <i class="fas fa-check"></i>
+              <span>Guardar Cambios</span>
+            </button>
+            <button type="button" class="btn btn-secondary" onclick="location.reload()">
+              <i class="fas fa-times"></i>
+              <span>Cancelar</span>
+            </button>
+          </div>
+        </form>
+      </div>
+
+
+    </div>
+  </div>
+</div>
+
+<script>
+
+  document.querySelector('.password-toggle').addEventListener('click', function () {
+    const passwordInput = document.querySelector('input[name="nueva_contrasena"]');
+    const icon = this.querySelector('i');
+
+    if (passwordInput.type === 'password') {
+      passwordInput.type = 'text';
+      icon.classList.remove('fa-eye');
+      icon.classList.add('fa-eye-slash');
+    } else {
+      passwordInput.type = 'password';
+      icon.classList.remove('fa-eye-slash');
+      icon.classList.add('fa-eye');
+    }
+  });
+
+
+  document.querySelector('input[name="nueva_contrasena"]').addEventListener('input', function () {
+    const password = this.value;
+    const strengthBar = document.querySelector('.strength-fill');
+    const strengthText = document.querySelector('.strength-text');
+
+    let strength = 0;
+    let text = 'Muy débil';
+    let color = '#ff4757';
+
+    if (password.length >= 8) strength += 25;
+    if (/[a-z]/.test(password)) strength += 25;
+    if (/[A-Z]/.test(password)) strength += 25;
+    if (/[0-9]/.test(password)) strength += 25;
+
+    if (strength >= 75) {
+      text = 'Muy segura';
+      color = '#2ed573';
+    } else if (strength >= 50) {
+      text = 'Segura';
+      color = '#ffa502';
+    } else if (strength >= 25) {
+      text = 'Débil';
+      color = '#ff7675';
+    }
+
+    strengthBar.style.width = strength + '%';
+    strengthBar.style.backgroundColor = color;
+    strengthText.textContent = text;
+  });
+
+  // Sin restricciones de longitud - el usuario puede poner lo que quiera
+
+</script>
+{% endblock %}

@@ -1,0 +1,10 @@
+flask
+yt-dlp
+apscheduler
+python-dotenv
+requests
+google-genai
+uvicorn
+asgiref
+whitenoise
+Pillow
