@@ -45,7 +45,7 @@ def run_sync():
 # Configurar scheduler para sincronización automática
 scheduler = BackgroundScheduler()
 scheduler.add_job(func=run_sync, trigger="interval", hours=6, id='sync_job')
-scheduler.add_job(func=run_sync, trigger="date", run_date=datetime.now(), id='startup_sync')
+# scheduler.add_job(func=run_sync, trigger="date", run_date=datetime.now(), id='startup_sync')
 scheduler.start()
 
 # Registrar shutdown del scheduler
@@ -57,4 +57,4 @@ print("[INFO] Sincronización automática de transcripciones activada (cada 6 ho
 # ==================== MAIN ====================
 
 if __name__ == "__main__":
-    uvicorn.run("run:asgi_app", host="0.0.0.0", port=5000, reload=True, reload_excludes=["static/*"])
+    uvicorn.run("run:asgi_app", host="0.0.0.0", port=8000, reload=True, reload_excludes=["static/*"])

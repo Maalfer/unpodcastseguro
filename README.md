@@ -93,19 +93,18 @@ python scripts/sync_transcripts.py
 ```bash
 python run.py
 ```
-La aplicación estará disponible en `http://localhost:5000`.
+La aplicación estará disponible en `http://localhost:8000`.
 
 ### 6. Permisos y Servicios (Producción)
-Para entornos de producción (Apache/Systemd), aplica los siguientes comandos:
+Para entornos de producción (Apache/Systemd), aplica los siguientes comandos garantizando que el usuario del servicio (`ups`) y el grupo del servidor web (`www-data`) tengan acceso:
+
 ```bash
-sudo chown -R www-data:www-data /var/www/unpodastseguro/
-sudo find /var/www/unpodastseguro -type d -exec chmod 755 {} \;
-sudo find /var/www/unpodastseguro -type f -exec chmod 644 {} \;
-sudo chmod 775 /var/www/unpodastseguro
-sudo chmod 664 /var/www/unpodastseguro/db.*
-sudo chmod +x /var/www/unpodastseguro/venv/bin/uvicorn
+sudo chown -R ups:www-data /var/www/unpodcastseguro/
+sudo find /var/www/unpodcastseguro -type d -exec chmod 775 {} \;
+sudo find /var/www/unpodcastseguro -type f -exec chmod 664 {} \;
+sudo chmod +x /var/www/unpodcastseguro/venv/bin/uvicorn
+sudo systemctl restart unpodcastseguro.service
 sudo systemctl restart apache2
-sudo systemctl restart unpodastseguro.service
 ```
 
 ---
